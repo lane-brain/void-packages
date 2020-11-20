@@ -26,20 +26,20 @@ maintainer="lane-brain <lane@mailbox.org>"
 license="GPL-3.0-or-later"
 homepage="http://www.gnu.org/software/emacs/"
 replaces="emacs>=0"
-nostrip=yes
 nocross=yes
 nopie=yes
 wrksrc="emacs-${_git_sha}"
 
 # Package build options
-build_options="nox x11 gtk2 gtk3 jpeg tiff gif png xpm svg xml imagemagick gnutls sound m17n dbus json harfbuzz cairo gmp fastboot lto"
+build_options="nox x11 gtk2 gtk3 jpeg tiff gif png xpm svg xml imagemagick gnutls sound m17n dbus 
+    json harfbuzz cairo gmp fastboot lto"
 desc_option_lto="Enable Link Time Optimization for build"
 desc_option_xpm="Enable support for XPM images"
 desc_option_sound="Enable support for sound"
 desc_option_m17n="Enable support for m17n multilingual text processing"
 #build_options_default="nox x11 gtk2 gtk3 jpeg tiff gif png xpm svg xml gnutls sound m17n json gmp"
 build_options_default="nox x11 gtk2 gtk3 jpeg tiff gif png xpm svg xml gnutls sound m17n json gmp 
-    imagemagick dbus cairo harfbuzz lto"
+    imagemagick dbus cairo harfbuzz lto fastboot"
 
 do_fetch() {
     [[ -d ${wrksrc} ]] || git clone git://github.com/flatwhatson/emacs.git ${wrksrc}
@@ -137,6 +137,7 @@ do_build() {
 
 do_install() {
 	make DESTDIR=$DESTDIR -C ${wrksrc}/nox install
+
 	rm -f ${DESTDIR}/usr/bin/ctags
 	rm -f ${DESTDIR}/usr/lib/systemd/user/emacs.service
 	rm -f ${DESTDIR}/usr/share/man/man1/ctags.1*
