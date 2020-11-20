@@ -1,2 +1,2 @@
 #!/bin/sh
-exec ananicy start 2>&1
+exec ananicy start 1>&2

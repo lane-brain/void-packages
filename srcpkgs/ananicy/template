@@ -2,12 +2,12 @@
 pkgname=ananicy
 version=2.2.0+git.$(date +%Y%m%d)
 revision=1
-wrksrc=${pkgname}-{$version}
+wrksrc=${pkgname}-${version}
 build_style=gnu-makefile
-hostmakedepends=" git"
+hostmakedepends="git util-linux"
 makedepends=""
-depends="python"
-short_desc=""
+depends="python3"
+short_desc="A shell daemon created to manage processes' IO and CPU priorities, with community-driven set of rules for popular applications."
 maintainer="lane-brain <lane@mailbox.org>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/Nefelim4ag/Ananicy"
@@ -18,12 +18,11 @@ do_fetch() {
 
 do_install() {
     cd ${wrksrc}
-    make install
-    vsv
+    make install 
 }
 
 post_install() {
-    rm lib/systemd/system/ananicy.service
+    vsv ananicy
 }
 
 
