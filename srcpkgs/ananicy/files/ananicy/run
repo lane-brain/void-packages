@@ -1,0 +1,2 @@
+#!/bin/sh
+exec ananicy start 2>&1
