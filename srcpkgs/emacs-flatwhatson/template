@@ -2,7 +2,7 @@
 _git_sha=f6cf967b5e3d66a38844a641796d2c9d239d32bc
 pkgname=emacs-flatwhatson
 version=28.0.50.${_git_sha:0:7}
-revision=2
+revision=1
 build_style=gnu-configure
 configure_args="--with-file-notification=inotify --with-modules 
  --without-gconf --without-gsettings --with-nativecomp --with-gameuser=:games 
@@ -32,14 +32,14 @@ nopie=yes
 wrksrc="emacs-${_git_sha}"
 
 # Package build options
-build_options="nox x11 gtk2 gtk3 jpeg tiff gif png xpm svg xml imagemagick gnutls sound m17n dbus json harfbuzz cairo gmp lto fastboot"
+build_options="nox x11 gtk2 gtk3 jpeg tiff gif png xpm svg xml imagemagick gnutls sound m17n dbus json harfbuzz cairo gmp fastboot lto"
 desc_option_lto="Enable Link Time Optimization for build"
 desc_option_xpm="Enable support for XPM images"
 desc_option_sound="Enable support for sound"
 desc_option_m17n="Enable support for m17n multilingual text processing"
 #build_options_default="nox x11 gtk2 gtk3 jpeg tiff gif png xpm svg xml gnutls sound m17n json gmp"
 build_options_default="nox x11 gtk2 gtk3 jpeg tiff gif png xpm svg xml gnutls sound m17n json gmp 
-    imagemagick dbus cairo harfbuzz fastboot lto"
+    imagemagick dbus cairo harfbuzz lto"
 
 do_fetch() {
     [[ -d ${wrksrc} ]] || git clone git://github.com/flatwhatson/emacs.git ${wrksrc}
