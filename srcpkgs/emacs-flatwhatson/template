@@ -1,5 +1,5 @@
 # Template file for 'emacs-flatwhatson'
-_git_sha=69aafa2e5c8a435b2f4a2357492d4deaed34712f
+_git_sha=f6cf967b5e3d66a38844a641796d2c9d239d32bc
 pkgname=emacs-flatwhatson
 version=28.0.50.${_git_sha:0:7}
 revision=2
@@ -26,6 +26,7 @@ maintainer="lane-brain <lane@mailbox.org>"
 license="GPL-3.0-or-later"
 homepage="http://www.gnu.org/software/emacs/"
 replaces="emacs>=0"
+nostrip=yes
 nocross=yes
 nopie=yes
 wrksrc="emacs-${_git_sha}"
