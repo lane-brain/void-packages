@@ -1,7 +1,7 @@
 # Template file for 'ananicy'
 pkgname=ananicy
 version=2.2.0+git.$(date +%Y%m%d)
-revision=1
+revision=2
 wrksrc=${pkgname}-${version}
 build_style=gnu-makefile
 hostmakedepends="git util-linux"
@@ -18,10 +18,11 @@ do_fetch() {
 
 do_install() {
     cd ${wrksrc}
-    make install 
+    make PREFIX=${DESTDIR} install 
 }
 
 post_install() {
+    rm -r ${DESTDIR}/lib
     vsv ananicy
 }
 
