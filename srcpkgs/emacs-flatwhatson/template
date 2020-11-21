@@ -1,5 +1,5 @@
 # Template file for 'emacs-flatwhatson'
-_git_sha=f6cf967b5e3d66a38844a641796d2c9d239d32bc
+_git_sha=27ef79f57166da9e0fb744fea981d702feb71218
 pkgname=emacs-flatwhatson
 version=28.0.50.${_git_sha:0:7}
 revision=1
@@ -26,9 +26,10 @@ maintainer="lane-brain <lane@mailbox.org>"
 license="GPL-3.0-or-later"
 homepage="http://www.gnu.org/software/emacs/"
 replaces="emacs>=0"
+nostrip=yes
 nocross=yes
 nopie=yes
-wrksrc="emacs-${_git_sha}"
+wrksrc="emacs-${version}"
 
 # Package build options
 build_options="nox x11 gtk2 gtk3 jpeg tiff gif png xpm svg xml imagemagick gnutls sound m17n dbus 
@@ -50,37 +51,11 @@ do_fetch() {
 pre_configure() {
     ./autogen.sh
 
-	# Just configuring in different directories results in
-	# spurious emacs rebuilds with incompatible build numbers.
-	mkdir -p nox
-	mv * nox || true
-	cp -a nox x11
-	cp -a nox gtk2
-	cp -a nox gtk3
 }
 
 do_configure() {
-	if [ "$build_option_nox" ]; then
-		cd $wrksrc/nox
-        ./configure --without-x $(vopt_with dbus) ${configure_args}
-	fi
-
-	if [ "$build_option_x11" ]; then
-		cd $wrksrc/x11
-        ./configure --with-x-toolkit=athena --without-toolkit-scroll-bars \
-			$(vopt_with dbus) --without-gconf --without-gsettings \
-			${configure_args}
-	fi
-
-	if [ "$build_option_gtk2" ]; then
-		cd $wrksrc/gtk2
-		./configure --with-x-toolkit=gtk2 ${configure_args}
-	fi
-
-	if [ "$build_option_gtk3" ]; then
-		cd $wrksrc/gtk3
+		cd $wrksrc
 		./configure --with-x-toolkit=gtk3 --with-pgtk --with-xwidgets ${configure_args}
-	fi
 }
 
 do_build() {
@@ -96,54 +71,17 @@ do_build() {
     export LD="/usr/bin/ld.gold"
     export CFLAGS+=" -fuse-ld=gold"
     export CXXFLAGS+=" -fuse-ld=gold"
-    ## End Arch PKGBUILD adds
-    
-    if [ "$build_option_nox" ]; then
+
         if [[ "$build_option_fastboot" ]]; then
-            make NATIVE_FAST_BOOT=1 ${makejobs} -C nox
-
+            make NATIVE_FAST_BOOT=1 ${makejobs} 
         else
-            make NATIVE_FULL_AOT=1 ${makejobs} -C nox
+            make NATIVE_FULL_AOT=1 ${makejobs} 
         fi
-    fi
-
-	if [ "$build_option_x11" ]; then
-        if [[ "$build_option_fastboot" ]]; then
-            make NATIVE_FAST_BOOT=1 ${makejobs} -C x11
-
-        else
-            make NATIVE_FULL_AOT=1 ${makejobs} -C x11
-        fi
-    fi
-
-	if [ "$build_option_gtk2" ]; then
-        if [[ "$build_option_fastboot" ]]; then
-            make NATIVE_FAST_BOOT=1 ${makejobs} -C gtk2 
-
-        else
-            make NATIVE_FULL_AOT=1 ${makejobs} -C gtk2
-        fi
-    fi
-
-	if [ "$build_option_gtk3" ]; then
-        if [[ "$build_option_fastboot" ]]; then
-            make NATIVE_FAST_BOOT=1 ${makejobs} -C gtk3
-
-        else
-            make NATIVE_FULL_AOT=1 ${makejobs} -C gtk3
-        fi
-    fi
 }
 
 do_install() {
-	make DESTDIR=$DESTDIR -C ${wrksrc}/nox install
-
-	rm -f ${DESTDIR}/usr/bin/ctags
-	rm -f ${DESTDIR}/usr/lib/systemd/user/emacs.service
-	rm -f ${DESTDIR}/usr/share/man/man1/ctags.1*
-	rm -f ${DESTDIR}/usr/share/info/info.info
-	rm -rf ${DESTDIR}/usr/share/applications
-	rm -rf ${DESTDIR}/usr/share/icons
+	make DESTDIR=${PKGDESTDIR} -C ${wrksrc} install
+    make DESTDIR=${PKGDESTDIR} -C ${wrksrc}   install-eln
 }
 
 emacs-flatwhatson-common_package() {
@@ -159,47 +97,4 @@ emacs-flatwhatson-common_package() {
 	}
 }
 
-if [ "$build_option_x11" ]; then
-	emacs-flatwhatson-x11_package() {
-		depends="emacs-flatwhatson-common-${version}_${revision}"
-		provides="emacs-${version}_${revision}"
-		replaces="emacs>=0"
-		short_desc+=" - X11 version"
-		pkg_install() {
-			make DESTDIR=${PKGDESTDIR} -C ${wrksrc}/x11 install
-			rm -f ${PKGDESTDIR}/usr/bin/ctags
-			rm -rf ${PKGDESTDIR}/usr/share
-			rm -rf ${PKGDESTDIR}/usr/lib
-		}
-	}
-fi
 
-if [ "$build_option_gtk2" ]; then
-	emacs-flatwhatson-gtk2_package() {
-		depends="emacs-flatwhatson-common-${version}_${revision} desktop-file-utils hicolor-icon-theme"
-		provides="emacs-${version}_${revision}"
-		replaces="emacs>=0"
-		short_desc+=" - GTK+2 version"
-		pkg_install() {
-			make DESTDIR=${PKGDESTDIR} -C ${wrksrc}/gtk2 install
-			rm -f ${PKGDESTDIR}/usr/bin/ctags
-			rm -rf ${PKGDESTDIR}/usr/share/{emacs,man,info}
-			rm -rf ${PKGDESTDIR}/usr/lib
-		}
-	}
-fi
-
-if [ "$build_option_gtk3" ]; then
-	emacs-flatwhatson-gtk3_package() {
-		depends="emacs-flatwhatson-common-${version}_${revision} desktop-file-utils hicolor-icon-theme"
-		provides="emacs-${version}_${revision}"
-		replaces="emacs>=0"
-		short_desc+=" - GTK+3 version"
-		pkg_install() {
-			make DESTDIR=${PKGDESTDIR} -C ${wrksrc}/gtk3 install
-			rm -f ${PKGDESTDIR}/usr/bin/ctags
-			rm -rf ${PKGDESTDIR}/usr/share/{emacs,man,info}
-			rm -rf ${PKGDESTDIR}/usr/lib
-		}
-}
-fi
