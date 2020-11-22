@@ -14,7 +14,7 @@ distfiles="https://github.com/djcb/${pkgname}/releases/download/${version}/${pkg
 checksum=b26a504f8660b6374e0285daf7e26e6eb4ec0668bf2c8b4b1cd7667c4ebe6e8e
 
 if [ ! "$CROSS_BUILD" ]; then
-	hostmakedepends+=" emacs"
+	hostmakedepends+=" emacs-flatwhatson"
 else
 	configure_args+=" --disable-mu4e"
 fi
@@ -28,7 +28,7 @@ if [ ! "$CROSS_BUILD" ]; then
 	mu4e_package() {
 		archs=noarch
 		short_desc+=" - Emacs frontend"
-		depends="${sourcepkg}-${version}_${revision} emacs"
+		depends="${sourcepkg}-${version}_${revision} emacs-flatwhatson"
 		pkg_install() {
 			vmove usr/share/emacs
 			vmove usr/share/info
