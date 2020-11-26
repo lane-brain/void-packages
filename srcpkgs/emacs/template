@@ -29,9 +29,9 @@ replaces="emacs>=0"
 nostrip=yes
 nocross=yes
 nopie=yes
-distfiles="https://github.com/flatwhatson/emacs/archive/${_git_sha}.tar.gz"
+distfiles="https://github.com/flatwhatson/emacs/archive/${_git_sha}.tar.gz>${pkgname}-${_git_sha}.tar.gz"
 checksum=9135f9f3d7b6a817705eb8f9ee12d3c3d7287e429a3af7e40ecce160196cb64f
-wrksrc="emacs-${version}"
+wrksrc="${pkgname}-${_git_sha}"
 
 # Package build options
 build_options="nox x11 gtk2 gtk3 jpeg tiff gif png xpm svg xml imagemagick gnutls sound m17n dbus 
