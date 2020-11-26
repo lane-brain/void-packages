@@ -3,11 +3,12 @@ pkgname=alsa-ucm-conf
 version=1.2.4
 revision=1
 archs="i686* x86_64*"
+depends="alsa-lib"
 wrksrc=${pkgname}-${version}
-short_desc="Sound Open Firmware and topology binaries"
-maintainer="cinerea0 <cinerea0@protonmail.com>"
+short_desc="ALSA Use Case Manager topology configuration."
+maintainer="lane-brain <lane@mailbox.org>"
 license="BSD-3-Clause"
-homepage="https://thesofproject.github.io/latest/index.html"
+homepage="https://github.com/alsa-project/alsa-ucm-conf"
 distfiles="https://www.alsa-project.org/files/pub/lib/${pkgname}-${version}.tar.bz2"
 checksum=2c3b535c77dcb9aaf62a61f4f8324f1ab184162f105f7ec9ed1e37c742fcd340
 
@@ -15,7 +16,7 @@ do_install() {
     cd ${wrksrc}
     find ucm2 -type f -iname "*.conf" -exec install -vDm 644 {} "${DESTDIR}/usr/share/alsa/"{} \;
     find ucm2 -type l -iname "*.conf" -exec cp -dv {} "${DESTDIR}/usr/share/alsa/"{} \;
-    install -vDm 644 LICENSE -t "${DESTDIR}/usr/share/licenses/${pkgname}"
     install -vDm 644 README.md -t "${DESTDIR}/usr/share/doc/${pkgname}"
     install -vDm 644 ucm2/README.md -t "${DESTDIR}/usr/share/doc/${pkgname}/ucm2"
+    vlicense LICENSE
 }
