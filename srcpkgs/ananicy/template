@@ -1,7 +1,7 @@
 # Template file for 'ananicy'
 pkgname=ananicy
-version=2.2.0+git.$(date +%Y%m%d)
-revision=2
+version=2.2.0+git
+revision=$(date +%Y%m%d)
 wrksrc=${pkgname}-${version}
 build_style=gnu-makefile
 hostmakedepends="git util-linux"
