@@ -1,8 +1,13 @@
 # Template file for 'tlp'
 pkgname=tlp
+<<<<<<< HEAD
 version=1.3.1+git
 revision=$(date +%Y%m%d)
 archs=noarch
+=======
+version=1.3.1
+revision=2
+>>>>>>> 27caa47321ea9bebec4d2b37daa469242c240e9d
 wrksrc="TLP-${version}"
 depends="hdparm bash iw util-linux ethtool perl"
 makedepends="git"
@@ -44,7 +49,6 @@ do_install() {
 
 tlp-rdw_package() {
 	short_desc="Control the radio device wizard"
-	archs=noarch
 	depends="tlp NetworkManager"
 	pkg_install() {
 		vmove usr/bin/tlp-rdw
